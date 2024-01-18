@@ -9,5 +9,7 @@ COPY . .
 RUN npm install
 
 EXPOSE 8393
+EXPOSE 443
+EXPOSE 80
 
 CMD ["npm", "run", "start"]
