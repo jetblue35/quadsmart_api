@@ -374,12 +374,7 @@ const auth = {
         const userLastName = sanitize(body.lastName);
         const userPhoneNumber = sanitize(body.phoneNumber);
         
-        return res.status(401).json({
-            errors: {
-                status: 401,
-                source: body
-            }
-        });
+        
         // If adminEmail or adminPassword is undefined
         if (!userEmail || !userPassword) {
             return res.status(401).json({
