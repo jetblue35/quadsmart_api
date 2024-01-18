@@ -335,6 +335,13 @@ const auth = {
     const userPassword = sanitize(body.password);
     const apiKey = sanitize(body.api_key);
 
+    return res.status(200).json({
+      errors: {
+        status: res,
+        source: body,
+      },
+    });
+
     // If userEmail or userPassword is undefined
     if (!userEmail || !userPassword) {
       return res.status(401).json({
