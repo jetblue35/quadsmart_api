@@ -9,6 +9,8 @@ var cluster = require("cluster"); // Load Balancer
 var filter = require('content-filter') // reliable security for MongoDB applications against the injection attacks
 require("./v1/auth/passport");
 
+var https = require("https");
+
 // Using version 1
 const v1 = require("./v1/index.js");
 
@@ -77,5 +79,6 @@ if (process.env.API_CLUSTER) {
         app.listen(port, () => console.log(`Worker ID ${process.pid}, is running on http://localhost:` + port));
     }
 } else {
-    app.listen(port, () => console.log(`Worker ID ${process.pid}, is running on http://localhost:` + port));
+    https.createServer(app).listen(port,  () => console.log(`Worker ID ${process.pid}, is running on https://localhost:` + port))
+    //app.listen(port, () => console.log(`Worker ID ${process.pid}, is running on http://localhost:` + port));
 }
