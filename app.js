@@ -13,7 +13,7 @@ require("./v1/auth/passport");
 const v1 = require("./v1/index.js");
 
 // Server port
-const port = process.env.REST_API_PORT || 443;
+const port = 443;
 
 const RateLimit = require('express-rate-limit');
 const passport = require('passport');
