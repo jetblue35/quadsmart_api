@@ -66,7 +66,7 @@ const credentials = {
     cert: certificate
 };
 
-if (process.env.API_CLUSTER) {
+if (false) {
     if (cluster.isPrimary) {
         console.log(`Primary ${process.pid} is running`);
         var cpuCount = require('os').cpus().length;
