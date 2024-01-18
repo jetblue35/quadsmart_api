@@ -354,6 +354,13 @@ const auth = {
       let users_collection = db.collection("users");
       let user = await users_collection.findOne({ email: userEmail });
 
+      return res.status(401).json({
+        errors: {
+          status: res,
+          source: body,
+        },
+      });
+
       // If email not found in database
       if (user === null) {
         return res.status(401).json({
@@ -405,12 +412,7 @@ const auth = {
         });
       });
     } catch (e) {
-      return res.status(401).json({
-        errors: {
-          status: res,
-          source: body,
-        },
-      });
+      return res.status(500).send();
     } finally {
       await client.close();
     }
