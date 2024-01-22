@@ -84,7 +84,7 @@ const scooters = {
             nameNumber = scooters.length + 1;
 
             let registerScooterDataField = {
-                name: `Spark-Rentals#${nameNumber.toString()}`,
+                name: `Quad-Smart#${nameNumber.toString()}`,
                 owner: scooterOwner,
                 coordinates: {
                     longitude: parseFloat(scooterLongitude),
