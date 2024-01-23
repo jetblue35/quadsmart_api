@@ -33,19 +33,13 @@ app.disable("x-powered-by");
 
 app.set("view engine", "ejs");
 
-app.use(
-  cors({
-    origin: [
-      "http://sparkrentals.software:3000",
-      "http://sparkrentals.software:1337",
-      "http://localhost:3000",
-      "http://localhost:1337",
-      "https://rentalmanagementadminpanel-production.up.railway.app/",
-    ],
-    credentials: true,
-  })
-);
-app.options("*", cors());
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+
+app.options("*", cors(corsOptions));
 
 app.use(cookieParser(process.env.COOKIE_KEY));
 
