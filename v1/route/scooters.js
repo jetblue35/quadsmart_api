@@ -35,7 +35,6 @@ router.put(
 
 router.put(
   "/position", // Update Coordinate of a scooter ( Only Admin access )
-  (req, res, next) => authModel.checkValidAdmin(req, res, next),
   (req, res) => scootersModel.editCoordinatesScooter(res, req.body, req.path)
 );
 

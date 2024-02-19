@@ -100,6 +100,7 @@ const auth = {
 
   validAPIKey: async function (apiKey, next, path, res) {
     // Check if it's correct API KEY
+
     if (!api_token.includes(apiKey)) {
       return res.status(401).json({
         errors: {
