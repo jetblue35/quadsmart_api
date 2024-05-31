@@ -342,60 +342,64 @@ const scooters = {
     },
 
     // Edit a specific scooters position
-    editCoordinatesScooter: async function(res, body, path) {
-        let scooterId = sanitize(body.scooter_id) // ID
-        let scooterLongitude = sanitize(body.longitude) // Position longitude
-        let scooterLatitude = sanitize(body.latitude) // Position latitude
+editCoordinatesScooter: async function(res, body, path) {
+    let scooterId = sanitize(body.scooter_id); // ID
+    let scooterLongitude = parseFloat(sanitize(body.longitude)); // Position longitude
+    let scooterLatitude = parseFloat(sanitize(body.latitude)); // Position latitude
 
-        // Check if the scooterId are valid MongoDB id.
-        if (!ObjectId.isValid(scooterId)) {
-            return res.status(400).json({
+    // Check if the scooterId is a valid MongoDB id.
+    if (!ObjectId.isValid(scooterId)) {
+        return res.status(400).json({
+            errors: {
+                status: 400,
+                detail: "The scooter_id is not a valid id."
+            }
+        });
+    }
+
+    if(isNaN(scooterLongitude) || isNaN(scooterLatitude)) {
+        return res.status(400).json({
+            errors: {
+                status: 400,
+                detail: "Required attributes longitude and latitude must be valid numbers."
+            }
+        });
+    }
+
+    let client = new MongoClient(mongoURI);
+    try {
+        let db = client.db("spark-rentals");
+        let scooters_collection = db.collection("scooters");
+        let scooter = await scooters_collection.findOne({_id: ObjectId(scooterId)});
+
+        // If nothing in db collection
+        if (scooter === null) {
+            return res.status(401).json({
                 errors: {
-                    status: 400,
-                    detail: "The scooter_id is not a valid id."
+                    status: 401,
+                    source: "PUT /scooters" + path,
+                    title: "Scooter not exists in database",
+                    detail: "The scooter doesn't exist in the database with the specified scooter_id."
                 }
             });
         }
 
-        if(!scooterLongitude || !scooterLatitude) {
-            return res.status(400).json({
-                errors: {
-                    status: 400,
-                    detail: "Required attribute longitude and latitude must contain strings with position"
-                }
-            });
-        }
+        let coordinatesField = {
+            longitude: scooterLongitude,
+            latitude: scooterLatitude
+        };
 
-        let client = new MongoClient(mongoURI);
-        try {
-            let db = client.db("spark-rentals");
-            let scooters_collection = db.collection("scooters");
-            let scooter = await scooters_collection.findOne({_id: ObjectId(scooterId)});
+        await scooters_collection.updateOne({_id: ObjectId(scooterId)}, {$set: {coordinates: coordinatesField}});
 
-            // If nothing in db collection
-            if (scooter === null) {
-                return res.status(401).json({
-                    errors: {
-                        status: 401,
-                        source: "PUT /scooters" + path,
-                        title: "Scooter not exists in database",
-                        detail: "The scooter dosen't exists in database with the specified scooter_id."
-                    }
-                });
-            };
+    } catch(e) {
+        return res.status(500).send();
+    } finally {
+        await client.close();
+    }
 
-            coordiantesField = {
-                longitude: scooterLongitude,
-                latitude: scooterLatitude
-            };
+    return res.status(204).send(); // Everything went well
+},
 
-
-            await scooters_collection.updateOne({_id: ObjectId(scooterId)}, {$set: {coordinates: coordiantesField} });
-
-        } catch(e) { return res.status(500).send(); } finally { await client.close(); }
-
-        return res.status(204).send(); // Everything went good
-    },
 
     // Rent a scooter
     rentScooter: async function(res, scooter_id, user_id, path) {
