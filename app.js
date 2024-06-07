@@ -78,10 +78,10 @@ setInterval(async () => {
     for (let i = 0; i < allScooters.length; i++) {
       if (allScooters[i]["status"] == "Available") {
         console.log(allScooters[i]["_id"]);
-        //await scooters_collection.updateOne(
-        //  {_id: ObjectId(allScooters[i]["_id"])},
-        //  {$set: {status: "Off"}}
-        //);
+        await scooters_collection.updateOne(
+          {_id: ObjectId(allScooters[i]["_id"])},
+          {$set: {status: "Off"}}
+        );
       }
     }
   } catch (e) {
