@@ -40,7 +40,8 @@
     "passport-google-oauth-token": "^1.0.4",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
-    "robust-point-in-polygon": "^1.0.3"
+    "robust-point-in-polygon": "^1.0.3",
+    "stopwatch-node": "^1.1.0"
   },
   "devDependencies": {
     "jsdoc": "^4.0.0",

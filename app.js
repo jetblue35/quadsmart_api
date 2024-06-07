@@ -8,10 +8,10 @@ var session = require("express-session");
 var cluster = require("cluster"); // Load Balancer
 var filter = require("content-filter"); // reliable security for MongoDB applications against the injection attacks
 require("./v1/auth/passport");
-
 // Using version 1
 const v1 = require("./v1/index.js");
-
+const {MongoClient, ObjectId} = require("mongodb");
+const mongoURI = process.env.DBURI;
 // Server port
 const port = process.env.REST_API_PORT || 443;
 
@@ -50,7 +50,7 @@ app.use(
     secret: process.env.COOKIE_KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: {secure: false},
   })
 );
 
@@ -58,13 +58,38 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(filter());
 
 app.use("/v1", v1); // Using the first version
+
+setInterval(async () => {
+  //tum aktif scooterları off a cek
+  let client = new MongoClient(mongoURI);
+
+  try {
+    let db = client.db("spark-rentals");
+    let scooters_collection = db.collection("scooters");
+    allScooters = await scooters_collection.find().toArray();
+
+    for (let i = 0; i < allScooters.length; i++) {
+      if (allScooters[i]["status"] == "Available") {
+        console.log(allScooters[i]["_id"]);
+        //await scooters_collection.updateOne(
+        //  {_id: ObjectId(allScooters[i]["_id"])},
+        //  {$set: {status: "Off"}}
+        //);
+      }
+    }
+  } catch (e) {
+    console.log("an error occured");
+  } finally {
+    await client.close();
+  }
+}, 20000);
 
 if (false) {
   if (cluster.isPrimary) {
