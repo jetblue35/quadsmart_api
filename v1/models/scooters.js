@@ -253,10 +253,12 @@ const scooters = {
       let db = client.db("spark-rentals");
       let scooters_collection = db.collection("scooters");
       scooter = await scooters_collection.findOne({_id: ObjectId(scooterId)});
-      await scooters_collection.updateOne(
-        {_id: ObjectId(scooterId)},
-        {$set: {status: "Available"}}
-      );
+      if (scooter["status"] == "Off") {
+        await scooters_collection.updateOne(
+          {_id: ObjectId(scooterId)},
+          {$set: {status: "Available"}}
+        );
+      }
     } catch (e) {
       return res.status(500).send();
     } finally {
