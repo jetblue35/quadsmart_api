@@ -45,7 +45,7 @@ router.get(
     scootersModel.getSpecificScooter(res, req.params.scooter_id, req.path)
 );
 
-router.get("/:scooter_id", (req, res) =>
+router.get("/islocked/:scooter_id", (req, res) =>
   scootersModel.isLocked(res, req.params.scooter_id, req.path)
 );
 
