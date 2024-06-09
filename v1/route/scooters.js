@@ -49,6 +49,10 @@ router.get("/islocked/:scooter_id", (req, res) =>
   scootersModel.isLocked(res, req.params.scooter_id, req.path)
 );
 
+router.get("/isflashlighton/:scooter_id", (req, res) =>
+  scootersModel.isFlashlightOn(res, req.params.scooter_id, req.path)
+);
+
 router.get(
   "/owner/:owner_id", // Get all scooters from a city
   (req, res, next) => authModel.validTokenKey(req, res, next),
