@@ -708,7 +708,7 @@ const scooters = {
       // Push the trip object to trip object in scooter and status to "In use"
       await scooters_collection.updateOne(
         {_id: ObjectId(scooterId)},
-        {$set: {status: "In use", trip: trip, isLocked: "false"}}
+        {$set: {status: "In use", trip: trip, isLocked: false}}
       );
     } catch (e) {
       return res.status(500).send();
@@ -988,7 +988,7 @@ const scooters = {
       // Stop the scooter and set the status to Available and trip endtime to the stop time
       await scooters_collection.updateOne(
         {_id: ObjectId(scooterId)},
-        {$set: {status: "Available", "trip.endTime": endTime, isLocked: "true"}}
+        {$set: {status: "Available", "trip.endTime": endTime, isLocked: true}}
       );
     } catch (e) {
       return res.status(500).send();
