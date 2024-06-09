@@ -24,7 +24,7 @@ const scooters = {
     try {
       let db = client.db("spark-rentals");
       let scooters_collection = db.collection("scooters");
-      f = await scooters_collection.find().toArray();
+      scooters = await scooters_collection.find().toArray();
     } catch (e) {
       res.status(500).send();
     } finally {
