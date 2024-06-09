@@ -24,7 +24,7 @@ const scooters = {
     try {
       let db = client.db("spark-rentals");
       let scooters_collection = db.collection("scooters");
-      scooters = await scooters_collection.find().toArray();
+      f = await scooters_collection.find().toArray();
     } catch (e) {
       res.status(500).send();
     } finally {
@@ -230,6 +230,52 @@ const scooters = {
       });
     }
 
+    res.status(200).send({scooter}); // Sends data from the specific admin
+  },
+
+  //get scooter's locked information
+  isLocked: async function (res, scooter_id, path) {
+    let scooterId = sanitize(scooter_id);
+    let scooter = null;
+
+    // Check if the scooterId are valid MongoDB id.
+    if (!ObjectId.isValid(scooterId)) {
+      return res.status(400).json({
+        errors: {
+          status: 400,
+          detail: "The scooter_id is not a valid id.",
+        },
+      });
+    }
+
+    let client = new MongoClient(mongoURI);
+    try {
+      let db = client.db("spark-rentals");
+      let scooters_collection = db.collection("scooters");
+      scooter = await scooters_collection.findOne({_id: ObjectId(scooterId)});
+    } catch (e) {
+      return res.status(500).send();
+    } finally {
+      await client.close();
+    }
+
+    // If nothing in scooters db collection
+    if (scooter === null || !Object.keys(scooter).length) {
+      return res.status(401).json({
+        errors: {
+          status: 401,
+          source: "GET /scooters" + path,
+          title: "Scooter not exists in database",
+          detail:
+            "The scooter dosen't exists in database with the specified scooter_id.",
+        },
+      });
+    }
+
+    console.log(scooter["isLocked"]);
+    if (scooter["isLocked"]) {
+      console.log("kilitli");
+    }
     res.status(200).send({scooter}); // Sends data from the specific admin
   },
 
