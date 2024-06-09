@@ -273,7 +273,7 @@ const scooters = {
     }
 
     if (scooter["isLocked"]) {
-      res.status(200).send(true);
+      return res.status(200).send(true);
     }
     res.status(200).send(false);
   },
