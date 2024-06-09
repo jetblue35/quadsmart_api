@@ -272,12 +272,10 @@ const scooters = {
       });
     }
 
-    console.log(scooter["isLocked"]);
     if (scooter["isLocked"]) {
-      console.log("kilitli");
-      res.status(200).send({result: true});
+      res.status(200).send(true);
     }
-    res.status(200).send(scooter["isLocked"]);
+    res.status(200).send(false);
   },
 
   // Delete a specific scooter
