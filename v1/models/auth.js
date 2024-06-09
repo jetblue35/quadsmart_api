@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize"); // To prevent malicious users overwriting (NoSQL Injection)
-const { MongoClient } = require("mongodb");
+const {MongoClient} = require("mongodb");
 const mongoURI = process.env.DBURI;
 const api_token = process.env.API_TOKEN;
 const jwtSecret = process.env.JWT_SECRET;
@@ -138,7 +138,7 @@ const auth = {
     try {
       let db = client.db("spark-rentals");
       let admins_collection = db.collection("admins");
-      let admin = await admins_collection.findOne({ email: adminEmail });
+      let admin = await admins_collection.findOne({email: adminEmail});
 
       // If email not found in database
       if (admin === null) {
@@ -177,8 +177,8 @@ const auth = {
             },
           });
         }
-        let payload = { api_key: apiKey, email: admin.email };
-        let jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: 60 * 60 });
+        let payload = {api_key: apiKey, email: admin.email};
+        let jwtToken = jwt.sign(payload, jwtSecret, {expiresIn: 60 * 60});
 
         return res.json({
           data: {
@@ -230,7 +230,7 @@ const auth = {
     try {
       let db = client.db("spark-rentals");
       let admins_collection = db.collection("admins");
-      let admin = await admins_collection.findOne({ email: adminEmail });
+      let admin = await admins_collection.findOne({email: adminEmail});
 
       // If email found in database
       if (admin !== null) {
@@ -353,7 +353,7 @@ const auth = {
     try {
       let db = client.db("spark-rentals");
       let users_collection = db.collection("users");
-      let user = await users_collection.findOne({ email: userEmail });
+      let user = await users_collection.findOne({email: userEmail});
 
       // If email not found in database
       if (user === null) {
@@ -382,8 +382,8 @@ const auth = {
 
         // If everything goes allright it creates a jwt token and send a response sucess with jwt token
         if (result) {
-          let payload = { id: user._id, email: user.email };
-          let jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: 60 * 60 });
+          let payload = {id: user._id, email: user.email};
+          let jwtToken = jwt.sign(payload, jwtSecret, {expiresIn: 60 * 60});
 
           return res.json({
             data: {
@@ -456,7 +456,7 @@ const auth = {
     try {
       let db = client.db("spark-rentals");
       let users_collection = db.collection("users");
-      let user = await users_collection.findOne({ email: userEmail });
+      let user = await users_collection.findOne({email: userEmail});
 
       // If email found in database
       if (user !== null) {
@@ -502,7 +502,7 @@ const auth = {
           let db = registerClient.db("spark-rentals");
           let users_collection = db.collection("users");
           await users_collection.insertOne(userCreate);
-          findUser = await users_collection.findOne({ email: userEmail });
+          findUser = await users_collection.findOne({email: userEmail});
         } catch (e) {
           return res.status(500);
         } finally {

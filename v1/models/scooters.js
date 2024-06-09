@@ -275,8 +275,9 @@ const scooters = {
     console.log(scooter["isLocked"]);
     if (scooter["isLocked"]) {
       console.log("kilitli");
+      res.status(200).send({result: true});
     }
-    res.status(200).send({scooter}); // Sends data from the specific admin
+    res.status(200).send(scooter["isLocked"]);
   },
 
   // Delete a specific scooter
