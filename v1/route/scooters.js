@@ -38,6 +38,10 @@ router.put(
   (req, res) => scootersModel.editCoordinatesScooter(res, req.body, req.path)
 );
 
+router.put("/toggleflashlight", (req, res) =>
+  scootersModel.toggleFlaslight(res, req.body, req.path)
+);
+
 router.get(
   "/:scooter_id", // Get specific scooter
   (req, res, next) => authModel.validTokenKey(req, res, next),

@@ -46,6 +46,39 @@ const scooters = {
     res.status(200).send({scooters}); // Sends the whole collection data
   },
 
+  toggleFlaslight: async function (res, body, path) {
+    let scooterId = sanitize(body.scooter_id);
+    let scooter = null;
+
+    // Check if the scooterId are valid MongoDB id.
+    if (!ObjectId.isValid(scooterId)) {
+      return res.status(400).json({
+        errors: {
+          status: 400,
+          detail: "The scooter_id is not a valid id.",
+        },
+      });
+    }
+
+    let client = new MongoClient(mongoURI);
+    try {
+      let db = client.db("spark-rentals");
+      let scooters_collection = db.collection("scooters");
+      scooter = await scooters_collection.findOne({_id: ObjectId(scooterId)});
+
+      await scooters_collection.updateOne(
+        {_id: ObjectId(scooterId)},
+        {$set: {status: scooter["isFlashlightOn"] == false ? true : false}}
+      );
+    } catch (e) {
+      return res.status(500).send();
+    } finally {
+      await client.close();
+    }
+
+    return res.status(204).send(); // Everything went good
+  },
+
   // Register a scooter
   registerScooter: async function (res, body, path) {
     let nameNumber = 0;
