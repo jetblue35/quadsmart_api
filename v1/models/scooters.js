@@ -6,6 +6,7 @@ var classifyPoint = require("robust-point-in-polygon");
 const scooters = {
   scooterField: {
     owner: "string",
+    isFlashlightOn: "boolean",
     coordinates: {
       longitude: "string",
       latitude: "string",
@@ -69,7 +70,11 @@ const scooters = {
       console.log(scooter["isFlashlightOn"] == false);
       await scooters_collection.updateOne(
         {_id: ObjectId(scooterId)},
-        {$set: {status: scooter["isFlashlightOn"] == false ? true : false}}
+        {
+          $set: {
+            isFlashlightOn: scooter["isFlashlightOn"] == false ? true : false,
+          },
+        }
       );
     } catch (e) {
       return res.status(500).send();
