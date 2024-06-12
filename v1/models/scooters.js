@@ -65,7 +65,8 @@ const scooters = {
       let db = client.db("spark-rentals");
       let scooters_collection = db.collection("scooters");
       scooter = await scooters_collection.findOne({_id: ObjectId(scooterId)});
-
+      console.log(scooter["isFlashlightOn"]);
+      console.log(scooter["isFlashlightOn"] == false);
       await scooters_collection.updateOne(
         {_id: ObjectId(scooterId)},
         {$set: {status: scooter["isFlashlightOn"] == false ? true : false}}
